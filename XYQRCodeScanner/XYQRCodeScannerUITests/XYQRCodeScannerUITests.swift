@@ -2,8 +2,8 @@
 //  XYQRCodeScannerUITests.swift
 //  XYQRCodeScannerUITests
 //
-//  Created by mouruiXY on 2017/6/28.
-//  Copyright © 2017年 mouruiXY. All rights reserved.
+//  Created by xiaoyi on 2017/6/28.
+//  Copyright © 2017年 xiaoyi. All rights reserved.
 //
 
 import XCTest

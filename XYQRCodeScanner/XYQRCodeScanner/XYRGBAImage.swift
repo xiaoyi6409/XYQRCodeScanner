@@ -2,8 +2,8 @@
 //  XYRGBAImage.swift
 //  XYQRCodeScanner
 //
-//  Created by mouruiXY on 2017/7/4.
-//  Copyright © 2017年 mouruiXY. All rights reserved.
+//  Created by xiaoyi on 2017/7/4.
+//  Copyright © 2017年 xiaoyi. All rights reserved.
 //
 
 import UIKit

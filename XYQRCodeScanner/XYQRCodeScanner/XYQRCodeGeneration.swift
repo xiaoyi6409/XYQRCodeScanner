@@ -2,8 +2,8 @@
 //  XYQRCodeGeneration.swift
 //  XYQRCodeScanner
 //
-//  Created by mouruiXY on 2017/7/3.
-//  Copyright © 2017年 mouruiXY. All rights reserved.
+//  Created by xiaoyi on 2017/7/3.
+//  Copyright © 2017年 xiaoyi. All rights reserved.
 //
 
 import UIKit
@@ -14,7 +14,7 @@ class XYQRCodeGeneration: NSObject {
     
     
     //MARK: - 生成二维码
-    func generateQRCode(codeStr:String) -> UIImage{
+   public func generateQRCode(codeStr:String) -> UIImage{
         let qrCodeImage = self.createNonInterpolatedUIImageFromCIImage(image: createQRForStr(str: codeStr)!, size: 400)
         return qrCodeImage!
     }
@@ -65,23 +65,23 @@ class XYQRCodeGeneration: NSObject {
 extension UIImage{
     
     /*
-    //MARK: - 获取图片的某像素颜色
-    func getPixelColor(pos:CGPoint)->(alpha: CGFloat, red: CGFloat, green: CGFloat,blue:CGFloat){
-        //let pixelData=CGDataProviderCopyData(CGImageGetDataProvider(self.CGImage))
-        let pixelData=self.cgImage!.dataProvider!.data
-        let data:UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
-        let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
-        
-        let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
-        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
-        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
-        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
-        
-        return (a,r,g,b)
-    }
-    */
+     //MARK: - 获取图片的某像素颜色
+     func getPixelColor(pos:CGPoint)->(alpha: CGFloat, red: CGFloat, green: CGFloat,blue:CGFloat){
+     //let pixelData=CGDataProviderCopyData(CGImageGetDataProvider(self.CGImage))
+     let pixelData=self.cgImage!.dataProvider!.data
+     let data:UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+     let pixelInfo: Int = ((Int(self.size.width) * Int(pos.y)) + Int(pos.x)) * 4
+     
+     let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
+     let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
+     let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
+     let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
+     
+     return (a,r,g,b)
+     }
+     */
     
-//MARK: - 设置二维码的颜色，此处将黑色二维码改成需要的颜色，背景为透明灰色
+    //MARK: - 设置二维码的颜色，此处将黑色二维码改成需要的颜色，背景为透明灰色
     func  setImagePixelColor(colorStr:String,alpha:CGFloat) -> UIImage{
         var imageRGBA = RGBAImage(image: self)!
         let rgbaPrameter = XYColorStringToRGB(colorName: colorStr, alpha: alpha)
@@ -91,13 +91,13 @@ extension UIImage{
                 let index = y * imageRGBA.width + x
                 var pixel = imageRGBA.pixels[index]
                 if pixel.red == 0 && pixel.blue == 0 && pixel.green == 0{
-                
-                pixel.red = rgbaPrameter.r
-                pixel.blue = rgbaPrameter.g
-                pixel.green = rgbaPrameter.b
-                pixel.alpha = UInt8(alpha * 255)
-                
-                imageRGBA.pixels[index] = pixel
+                    
+                    pixel.red = rgbaPrameter.r
+                    pixel.blue = rgbaPrameter.g
+                    pixel.green = rgbaPrameter.b
+                    pixel.alpha = UInt8(alpha * 255)
+                    
+                    imageRGBA.pixels[index] = pixel
                 }else if  pixel.red == 255 && pixel.blue == 255 && pixel.green == 255{
                     pixel.red = 170
                     pixel.blue = 170
@@ -109,6 +109,32 @@ extension UIImage{
         }
         return imageRGBA.toUIImage()!
     }
+    
+    
+    //MARK: - 读取图片当中的二维码信息
+    public func readImageQRCodeInfo() -> String?{
+        let data = UIImagePNGRepresentation(self)
+        let ciImage = CIImage(data: data!)
+        
+        let qrDetector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil, options: [CIDetectorAccuracy : CIDetectorAccuracyHigh])
+        if let detector = qrDetector {
+            //识别到的图片数据数组
+            let features = detector.features(in: ciImage!)
+            //识别二维码正常就一条数据,所以取一条
+            print(features.count)
+            if features.count > 0{
+                if let decode = (features.first as? CIQRCodeFeature)?.messageString{
+                    return decode
+                }
+            }
+            
+        }
+        return nil
+        
+    }
+    
+    
+    
     
 }
 
