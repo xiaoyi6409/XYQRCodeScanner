@@ -28,6 +28,9 @@ class XYQRCodeGeneration: NSObject {
         qrFilter?.setValue("M", forKey: "inputCorrectionLevel")
         return qrFilter?.outputImage
     }
+  
+    
+    
     
     
     
@@ -80,6 +83,37 @@ extension UIImage{
      return (a,r,g,b)
      }
      */
+    
+    
+    //MARK: - 添加二维码logo
+    public func addQRCodeImageLogo(logoPicture:UIImage) -> UIImage?{
+        
+        var logoImage:UIImage!
+        
+        UIGraphicsBeginImageContext(self.size)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        
+        logoImage = logoPicture
+        
+        let logoWidth = CGFloat(self.size.width/4)
+        let logoHeight = CGFloat(self.size.width/4)
+        let logoX = CGFloat(self.size.width/2-logoWidth/2)
+        let logoY = CGFloat(self.size.height/2-logoHeight/2)
+        
+        //利用贝塞尔曲线进行图片圆角裁切
+        UIBezierPath(roundedRect: CGRect(x: logoX, y: logoY, width: logoWidth, height: logoHeight), cornerRadius: logoWidth/5).addClip()
+        
+        
+        logoImage.draw(in: CGRect(x: logoX, y: logoY, width: logoWidth, height: logoHeight))
+        let logoQRCodeImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return logoQRCodeImage
+        
+    }
+
+    
+    
     
     //MARK: - 设置二维码的颜色，此处将黑色二维码改成需要的颜色，背景为透明灰色
     func  setImagePixelColor(colorStr:String,alpha:CGFloat) -> UIImage{

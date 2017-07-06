@@ -19,7 +19,11 @@ class ViewController: UIViewController {
         //生成二维码并显示
         let QRCodePriduce = XYQRCodeGeneration()
        QRCodeImage =   QRCodePriduce.generateQRCode(codeStr:  "http://www.baidu.com")
+       //设置二维码颜色
        QRCodeImage = QRCodeImage.setImagePixelColor(colorStr: "068b22", alpha: 1.0)
+       //为二维码添加logo
+       QRCodeImage = QRCodeImage.addQRCodeImageLogo(logoPicture: #imageLiteral(resourceName: "logo"))!
+        
         let QRCodeImageView = UIImageView(frame: CGRect(x: SCREENWIDTH/2 - 200/2, y: SCREENHEIGHT/2 - 200/2, width: 200, height: 200))
         QRCodeImageView.image = QRCodeImage
         
